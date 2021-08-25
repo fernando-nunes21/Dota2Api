@@ -1,5 +1,7 @@
 package com.dota.api.Heroes
 
+import com.dota.api.Errors.NotFoundAnyHero
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,9 +16,20 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/heroes")
 class HeroesController {
 
+    private HeroesService heroesService
+
+    HeroesController(HeroesService heroesService){
+        this.heroesService = heroesService
+    }
+
     @GetMapping
     ResponseEntity getHeroes() {
-
+        try{
+            heroesService.getHeroes()
+            return new ResponseEntity(HttpStatus.OK)
+        } catch(NotFoundAnyHero e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND)
+        }
     }
 
     @GetMapping("/recommends")
