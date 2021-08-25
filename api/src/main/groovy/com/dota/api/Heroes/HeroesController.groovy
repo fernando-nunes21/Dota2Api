@@ -19,7 +19,7 @@ class HeroesController {
 
     }
 
-    @GetMapping
+    @GetMapping("/recommends")
     ResponseEntity getHeroRecommendation(@RequestParam("lane") String lane,
                                          @RequestParam("difficult") String difficult) {
 
