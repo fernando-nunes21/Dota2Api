@@ -2,7 +2,7 @@ package com.dota.api.Heroes
 
 class HeroesService {
 
-    void getHeroes() {
-
+    List<Heroes> getHeroes() {
+        return new ArrayList<Heroes>()
     }
 }

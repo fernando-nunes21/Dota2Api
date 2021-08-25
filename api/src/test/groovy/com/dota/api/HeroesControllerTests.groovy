@@ -20,7 +20,7 @@ class HeroesControllerTests extends Specification {
     private HeroesController heroesController = new HeroesController(heroesService)
     private MockMvc mockMvc = MockMvcBuilders.standaloneSetup(heroesController).build()
 
-    def "Get Heroes should return a status code 200 when everything is normal"(){
+    def "Get Heroes should return a status code 200 when returns list of heroes"(){
         given:
 
         when:
