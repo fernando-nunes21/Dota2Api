@@ -24,3 +24,9 @@ pipelines:
             # Run a security scan for sensitive data.
             # See more security tools at https://bitbucket.org/product/features/pipelines/integrations?&category=security
             - pipe: atlassian/git-secrets-scan:0.4.3
+      - step:
+          name: Deploy
+          deployment: deploy to heroku
+          trigger: manual
+          script:
+            - git push https://heroku:fb5ccd2a-de91-46fa-9b79-4508538b1853@git.heroku.com/api-dota2.git HEAD
