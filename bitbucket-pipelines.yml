@@ -28,4 +28,4 @@ pipelines:
           name: Deploy
           trigger: manual
           script:
-            - git push https://heroku:fb5ccd2a-de91-46fa-9b79-4508538b1853@git.heroku.com/api-dota2.git HEAD
+            - git push https://heroku:fb5ccd2a-de91-46fa-9b79-4508538b1853@git.heroku.com/api-dota2.git master
