@@ -4,8 +4,6 @@ import com.dota.api.Errors.NotFoundAnyHero
 
 import com.dota.api.Heroes.HeroesController
 import com.dota.api.Heroes.HeroesService
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -16,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import spock.lang.Specification
 
-class HeroesControllerTests extends Specification {
+class HeroControllerTests extends Specification {
 
     private HeroesService heroesService = Mock(HeroesService)
     private HeroesController heroesController = new HeroesController(heroesService)
@@ -45,7 +43,7 @@ class HeroesControllerTests extends Specification {
         response.andExpect(content().json("{'errorMessage':'Nenhum heroi foi encontrado na base de dados'}"))
     }
 
-    def "Get a hero recommend should return a status code 200 when params are correctly"(){
+    def "Get a hero recommend should return a status code 200 when params are correctly"() {
         when:
         ResultActions response = mockMvc.perform(get("/v1/heroes/recommends?lane='safe'&difficult='easy'"))
 

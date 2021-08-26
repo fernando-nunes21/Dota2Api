@@ -1,5 +1,5 @@
 package com.dota.api.Heroes
 
-class Heroes {
+class Hero {
 
 }

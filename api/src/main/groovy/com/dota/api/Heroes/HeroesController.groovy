@@ -26,7 +26,7 @@ class HeroesController {
     @GetMapping
     ResponseEntity getHeroes() {
         try {
-            List<Heroes> heroes = heroesService.getHeroes()
+            List<Hero> heroes = heroesService.getHeroes()
             return new ResponseEntity(heroes, HttpStatus.OK)
         } catch (NotFoundAnyHero e) {
             return new ResponseEntity(new ResponseErrors(e.getMessage()), HttpStatus.NOT_FOUND)
@@ -36,7 +36,8 @@ class HeroesController {
     @GetMapping("/recommends")
     ResponseEntity getHeroRecommendation(@RequestParam("lane") String lane,
                                          @RequestParam("difficult") String difficult) {
-        return new ResponseEntity(HttpStatus.OK)
+        Hero hero = heroesService.getHeroRecommendation(lane, difficult)
+        return new ResponseEntity(hero, HttpStatus.OK)
     }
 
     @GetMapping("/{id}/skins")
