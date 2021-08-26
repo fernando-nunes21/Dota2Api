@@ -19,17 +19,17 @@ class HeroesController {
 
     private HeroesService heroesService
 
-    HeroesController(HeroesService heroesService){
+    HeroesController(HeroesService heroesService) {
         this.heroesService = heroesService
     }
 
     @GetMapping
     ResponseEntity getHeroes() {
-        try{
-            heroesService.getHeroes()
-            return new ResponseEntity(HttpStatus.OK)
-        } catch(NotFoundAnyHero e){
-            return new ResponseEntity(new ResponseErrors(e.getMessage()),HttpStatus.NOT_FOUND)
+        try {
+            List<Heroes> heroes = heroesService.getHeroes()
+            return new ResponseEntity(heroes, HttpStatus.OK)
+        } catch (NotFoundAnyHero e) {
+            return new ResponseEntity(new ResponseErrors(e.getMessage()), HttpStatus.NOT_FOUND)
         }
     }
 
