@@ -1,6 +1,7 @@
 package com.dota.api.Heroes
 
 import com.dota.api.Errors.NotFoundAnyHero
+import com.dota.api.Errors.ResponseErrors
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -28,7 +29,7 @@ class HeroesController {
             heroesService.getHeroes()
             return new ResponseEntity(HttpStatus.OK)
         } catch(NotFoundAnyHero e){
-            return new ResponseEntity(HttpStatus.NOT_FOUND)
+            return new ResponseEntity(new ResponseErrors(e.getMessage()),HttpStatus.NOT_FOUND)
         }
     }
 
