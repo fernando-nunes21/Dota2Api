@@ -23,8 +23,6 @@ class HeroesControllerTests extends Specification {
     private MockMvc mockMvc = MockMvcBuilders.standaloneSetup(heroesController).build()
 
     def "Get Heroes should return a status code 200 when returns list of heroes"() {
-        given:
-
         when:
         ResultActions response = mockMvc.perform(get("/v1/heroes"))
 
@@ -45,7 +43,14 @@ class HeroesControllerTests extends Specification {
         then:
         response.andExpect(status().isNotFound())
         response.andExpect(content().json("{'errorMessage':'Nenhum heroi foi encontrado na base de dados'}"))
+    }
 
+    def "Get a hero recommend should return a status code 200 when params are correctly"(){
+        when:
+        ResultActions response = mockMvc.perform(get("/v1/heroes/recommends?lane='safe'&difficult='easy'"))
+
+        then:
+        response.andExpect(status().isOk())
     }
 
 }
