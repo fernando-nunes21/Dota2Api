@@ -36,7 +36,7 @@ class HeroesController {
     @GetMapping("/recommends")
     ResponseEntity getHeroRecommendation(@RequestParam("lane") String lane,
                                          @RequestParam("difficult") String difficult) {
-
+        return new ResponseEntity(HttpStatus.OK)
     }
 
     @GetMapping("/{id}/skins")
