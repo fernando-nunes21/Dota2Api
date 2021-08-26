@@ -45,4 +45,18 @@ class HeroesControllerTests extends Specification {
 
     }
 
+    def "Get Heroes should return a body with error response when code is 404"(){
+        given:
+        this.heroesService.getHeroes() >> {
+            throw new NotFoundAnyHero("Nenhum heroi foi encontrado na base de dados")
+        }
+
+        when:
+        ResultActions response = mockMvc.perform(get("/v1/heroes"))
+
+        then:
+        response.andExpect(status().isNotFound())
+        response.andReturn().getResponse().getContentAsString() == "Nenhum heroi foi encontrado na base de dados"
+    }
+
 }
