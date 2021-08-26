@@ -51,4 +51,19 @@ class HeroControllerTests extends Specification {
         response.andExpect(status().isOk())
     }
 
+    def "Get a hero recommend should return a status code 404 when not found any hero to recommend"() {
+        given:
+        this.heroesService.getHeroRecommendation() >> {
+            throw new NotFoundAnyHero("Nao foi encontrado nenhum heroi nesta lane com esta dificuldade")
+        }
+
+        when:
+        ResultActions response = mockMvc.perform(get("/v1/heroes/recommends?lane='safe'&difficult='easy'"))
+
+        then:
+        response.andExpect(status().isNotFound())
+        response.andExpect(content().json("{'errorMessage':'Nao foi encontrado nenhum heroi nesta lane com " +
+                "essa dificuldade'}"))
+    }
+
 }
