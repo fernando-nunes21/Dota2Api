@@ -93,4 +93,23 @@ class HeroControllerTests extends Specification {
                 "As lanes existentes são: safe, off e mid'}"))
     }
 
+    def "Get hero recommend should return 400 when difficult is not valid"() {
+        given:
+        LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>()
+        params.add("lane", "off")
+        params.add("difficult", "overkill")
+        this.heroService.getHeroRecommendation("off", "overkill") >> {
+            throw new InvalidHeroDifficult("A dificuldade informada do heroi nao existe. As dificuldades existentes" +
+                    " são: easy, medium e hard")
+        }
+
+        when:
+        ResultActions response = mockMvc.perform(get("/v1/heroes/recommends").params(params))
+
+        then:
+        response.andExpect(status().isBadRequest())
+        response.andExpect(content().json("{'errorMessage':'A dificuldade informada do heroi nao existe." +
+                " As dificuldades existentes são: easy, medium e hard'}"))
+    }
+
 }
