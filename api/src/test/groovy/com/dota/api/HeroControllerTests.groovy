@@ -46,9 +46,9 @@ class HeroControllerTests extends Specification {
 
     def "Get a hero recommend should return a status code 200 when params are correctly"() {
         given:
-        LinkedMultiValueMap<String,String> params = new LinkedMultiValueMap<>()
-        params.add("lane","safe")
-        params.add("difficult","easy")
+        LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>()
+        params.add("lane", "safe")
+        params.add("difficult", "easy")
 
         when:
         ResultActions response = mockMvc.perform(get("/v1/heroes/recommends").params(params))
@@ -59,10 +59,10 @@ class HeroControllerTests extends Specification {
 
     def "Get a hero recommend should return a status code 404 when not found a hero in that lane and difficult "() {
         given:
-        LinkedMultiValueMap<String,String> params = new LinkedMultiValueMap<>()
-        params.add("lane","safe")
-        params.add("difficult","easy")
-        this.heroService.getHeroRecommendation("safe","easy") >> {
+        LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>()
+        params.add("lane", "safe")
+        params.add("difficult", "easy")
+        this.heroService.getHeroRecommendation("safe", "easy") >> {
             throw new NotFoundAnyHero("Nao foi encontrado nenhum heroi nesta lane com essa dificuldade")
         }
         when:
@@ -72,6 +72,24 @@ class HeroControllerTests extends Specification {
         response.andExpect(status().isNotFound())
         response.andExpect(content().json("{'errorMessage':'Nao foi encontrado nenhum heroi nesta lane com " +
                 "essa dificuldade'}"))
+    }
+
+    def "Get a hero recommend should return 400 when informed lane is invalid"() {
+        given:
+        LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>()
+        params.add("lane", "low")
+        params.add("difficult", "easy")
+        this.heroService.getHeroRecommendation("low", "easy") >> {
+            throw new InvalidHeroLane("A lane informada do heroi nao existe. As lanes existentes são: safe, off e mid")
+        }
+
+        when:
+        ResultActions response = mockMvc.perform(get("/v1/heroes/recommend").params(params))
+
+        then:
+        response.andExpect(status().isBadRequest())
+        response.andExpect(content().json("{'errorMessage':'A lane informada do heroi nao existe. " +
+                "As lanes existentes são: safe, off e mid'}"))
     }
 
 }
