@@ -1,5 +1,6 @@
 package com.dota.api
 
+import com.dota.api.Errors.InvalidHeroLane
 import com.dota.api.Errors.NotFoundAnyHero
 
 import com.dota.api.Heroes.HeroController
@@ -84,7 +85,7 @@ class HeroControllerTests extends Specification {
         }
 
         when:
-        ResultActions response = mockMvc.perform(get("/v1/heroes/recommend").params(params))
+        ResultActions response = mockMvc.perform(get("/v1/heroes/recommends").params(params))
 
         then:
         response.andExpect(status().isBadRequest())

@@ -1,5 +1,6 @@
 package com.dota.api.Heroes
 
+import com.dota.api.Errors.InvalidHeroLane
 import com.dota.api.Errors.NotFoundAnyHero
 import com.dota.api.Errors.ResponseErrors
 import org.springframework.http.HttpStatus
@@ -41,6 +42,8 @@ class HeroController {
             return new ResponseEntity(hero, HttpStatus.OK)
         } catch (NotFoundAnyHero e){
             return new ResponseEntity(new ResponseErrors(e.getMessage()),HttpStatus.NOT_FOUND)
+        } catch (InvalidHeroLane e){
+            return new ResponseEntity(new ResponseErrors(e.getMessage()),HttpStatus.BAD_REQUEST)
         }
     }
 
