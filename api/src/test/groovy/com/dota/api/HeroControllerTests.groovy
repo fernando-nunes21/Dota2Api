@@ -113,12 +113,28 @@ class HeroControllerTests extends Specification {
                 " As dificuldades existentes são: easy, medium e hard'}"))
     }
 
-    def "Get a hero skins should return 200 when path param is valid"(){
+    def "Get a hero skins should return 200 when path param is valid"() {
         when:
-        ResultActions response = mockMvc.perform(get("/v1/heroes/{id}/skins","1"))
+        ResultActions response = mockMvc.perform(get("/v1/heroes/{id}/skins", 1))
 
         then:
         response.andExpect(status().isOk())
+    }
+
+    def "Get a hero skins should return 404 when not found a hero with the informed id"() {
+        given:
+        this.heroService.getHeroSkins(1) >> {
+            throw new NotFoundAnyHero("Nao foi encontrado nenhum heroi com o id informado")
+        }
+
+        when:
+        ResultActions response = mockMvc.perform(get("/v1/heroes/{id}/skins", 1))
+
+        then:
+        response.andExpect(status().isNotFound())
+        response.andExpect(content().json("{'errorMessage':'Nao foi encontrado nenhum heroi com o " +
+                "id informado'"))
+
     }
 
 }
