@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/heroes")
-class HeroesController {
+class HeroController {
 
-    private HeroesService heroesService
+    private HeroService heroesService
 
-    HeroesController(HeroesService heroesService) {
+    HeroController(HeroService heroesService) {
         this.heroesService = heroesService
     }
 
@@ -36,8 +36,12 @@ class HeroesController {
     @GetMapping("/recommends")
     ResponseEntity getHeroRecommendation(@RequestParam("lane") String lane,
                                          @RequestParam("difficult") String difficult) {
-        Hero hero = heroesService.getHeroRecommendation(lane, difficult)
-        return new ResponseEntity(hero, HttpStatus.OK)
+        try{
+            Hero hero = heroesService.getHeroRecommendation(lane, difficult)
+            return new ResponseEntity(hero, HttpStatus.OK)
+        } catch (NotFoundAnyHero e){
+            return new ResponseEntity(new ResponseErrors(e.getMessage()),HttpStatus.NOT_FOUND)
+        }
     }
 
     @GetMapping("/{id}/skins")

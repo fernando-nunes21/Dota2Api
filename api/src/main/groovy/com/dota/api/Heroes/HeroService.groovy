@@ -3,7 +3,7 @@ package com.dota.api.Heroes
 import com.dota.api.Skills.Skill
 import com.dota.api.Skins.Skin
 
-class HeroesService implements HeroesServiceInterface{
+class HeroService implements HeroServiceInterface{
 
     List<Hero> getHeroes() {
         return null

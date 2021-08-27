@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/skills")
-class SkillsController {
+class SkillController {
 
     @GetMapping
     ResponseEntity getSkills() {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/v1/skins")
-class SkinsController {
+class SkinController {
 
     @GetMapping
     ResponseEntity getSkins() {
