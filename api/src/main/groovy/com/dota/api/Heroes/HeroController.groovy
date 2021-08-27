@@ -1,5 +1,6 @@
 package com.dota.api.Heroes
 
+import com.dota.api.Errors.InvalidHeroDifficult
 import com.dota.api.Errors.InvalidHeroLane
 import com.dota.api.Errors.NotFoundAnyHero
 import com.dota.api.Errors.ResponseErrors
@@ -42,7 +43,7 @@ class HeroController {
             return new ResponseEntity(hero, HttpStatus.OK)
         } catch (NotFoundAnyHero e){
             return new ResponseEntity(new ResponseErrors(e.getMessage()),HttpStatus.NOT_FOUND)
-        } catch (InvalidHeroLane e){
+        } catch (InvalidHeroLane | InvalidHeroDifficult e){
             return new ResponseEntity(new ResponseErrors(e.getMessage()),HttpStatus.BAD_REQUEST)
         }
     }

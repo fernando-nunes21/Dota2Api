@@ -1,5 +1,6 @@
 package com.dota.api
 
+import com.dota.api.Errors.InvalidHeroDifficult
 import com.dota.api.Errors.InvalidHeroLane
 import com.dota.api.Errors.NotFoundAnyHero
 
