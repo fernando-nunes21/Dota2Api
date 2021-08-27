@@ -3,7 +3,8 @@ package com.dota.api.Heroes
 import com.dota.api.Errors.InvalidHeroDifficult
 import com.dota.api.Errors.InvalidHeroLane
 import com.dota.api.Errors.NotFoundAnyHero
-import com.dota.api.Errors.ResponseErrors
+import com.dota.api.Errors.ResponseError
+import com.dota.api.Skins.Skin
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -31,7 +32,7 @@ class HeroController {
             List<Hero> heroes = heroesService.getHeroes()
             return new ResponseEntity(heroes, HttpStatus.OK)
         } catch (NotFoundAnyHero e) {
-            return new ResponseEntity(new ResponseErrors(e.getMessage()), HttpStatus.NOT_FOUND)
+            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
         }
     }
 
@@ -42,15 +43,20 @@ class HeroController {
             Hero hero = heroesService.getHeroRecommendation(lane, difficult)
             return new ResponseEntity(hero, HttpStatus.OK)
         } catch (NotFoundAnyHero e){
-            return new ResponseEntity(new ResponseErrors(e.getMessage()),HttpStatus.NOT_FOUND)
+            return new ResponseEntity(new ResponseError(e.getMessage()),HttpStatus.NOT_FOUND)
         } catch (InvalidHeroLane | InvalidHeroDifficult e){
-            return new ResponseEntity(new ResponseErrors(e.getMessage()),HttpStatus.BAD_REQUEST)
+            return new ResponseEntity(new ResponseError(e.getMessage()),HttpStatus.BAD_REQUEST)
         }
     }
 
     @GetMapping("/{id}/skins")
     ResponseEntity getHeroSkins(@PathVariable Integer id) {
-
+        try{
+            List<Skin> heroSkins = heroesService.getHeroSkins(id)
+            return new ResponseEntity(heroSkins,HttpStatus.OK)
+        } catch (NotFoundAnyHero e){
+            return new ResponseEntity(new ResponseError(e.getMessage()),HttpStatus.NOT_FOUND)
+        }
     }
 
     @GetMapping("/{id}/skills")

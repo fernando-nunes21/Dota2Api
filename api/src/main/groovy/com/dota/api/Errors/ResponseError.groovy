@@ -1,10 +1,10 @@
 package com.dota.api.Errors
 
-class ResponseErrors {
+class ResponseError {
 
     private String errorMessage;
 
-    ResponseErrors(String errorMessage){
+    ResponseError(String errorMessage){
         this.errorMessage = errorMessage
     }
 

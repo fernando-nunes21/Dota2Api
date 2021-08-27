@@ -132,8 +132,8 @@ class HeroControllerTests extends Specification {
 
         then:
         response.andExpect(status().isNotFound())
-        response.andExpect(content().json("{'errorMessage':'Nao foi encontrado nenhum heroi com o " +
-                "id informado'"))
+        response.andExpect(content().json("{'errorMessage':'Nao foi encontrado nenhum heroi com o id " +
+                "informado'}"))
 
     }
 
