@@ -2,7 +2,9 @@ package com.dota.api.Heroes
 
 import com.dota.api.Errors.InvalidHeroDifficult
 import com.dota.api.Errors.InvalidHeroLane
-import com.dota.api.Errors.NotFoundAnyHero
+import com.dota.api.Errors.LimitExceeded
+import com.dota.api.Errors.NotFoundHero
+import com.dota.api.Errors.OffsetExceeded
 import com.dota.api.Errors.ResponseError
 import com.dota.api.Skins.Skin
 import org.springframework.http.HttpStatus
@@ -27,35 +29,42 @@ class HeroController {
     }
 
     @GetMapping
-    ResponseEntity getHeroes() {
+    ResponseEntity getHeroes(@RequestParam("lane") String lane,
+                             @RequestParam("difficult") String difficult,
+                             @RequestParam("recommend") Boolean recommend,
+                             @RequestParam("offset") Integer offset,
+                             @RequestParam("limit") Integer limit) {
         try {
-            List<Hero> heroes = heroesService.getHeroes()
+            List<Hero> heroes = heroesService.getHeroes(lane, difficult, recommend, offset, limit)
             return new ResponseEntity(heroes, HttpStatus.OK)
-        } catch (NotFoundAnyHero e) {
+        } catch (NotFoundHero e) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
+        } catch (LimitExceeded | OffsetExceeded e ) {
+            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
         }
     }
 
+    //TODO REMOVER ASSIM QUE TERMINAR TESTES COM GET HEROES
     @GetMapping("/recommends")
     ResponseEntity getHeroRecommendation(@RequestParam("lane") String lane,
                                          @RequestParam("difficult") String difficult) {
-        try{
+        try {
             Hero hero = heroesService.getHeroRecommendation(lane, difficult)
             return new ResponseEntity(hero, HttpStatus.OK)
-        } catch (NotFoundAnyHero e){
-            return new ResponseEntity(new ResponseError(e.getMessage()),HttpStatus.NOT_FOUND)
-        } catch (InvalidHeroLane | InvalidHeroDifficult e){
-            return new ResponseEntity(new ResponseError(e.getMessage()),HttpStatus.BAD_REQUEST)
+        } catch (NotFoundHero e) {
+            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
+        } catch (InvalidHeroLane | InvalidHeroDifficult e) {
+            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
         }
     }
 
     @GetMapping("/{id}/skins")
     ResponseEntity getHeroSkins(@PathVariable Integer id) {
-        try{
+        try {
             List<Skin> heroSkins = heroesService.getHeroSkins(id)
-            return new ResponseEntity(heroSkins,HttpStatus.OK)
-        } catch (NotFoundAnyHero e){
-            return new ResponseEntity(new ResponseError(e.getMessage()),HttpStatus.NOT_FOUND)
+            return new ResponseEntity(heroSkins, HttpStatus.OK)
+        } catch (NotFoundHero e) {
+            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
         }
     }
 

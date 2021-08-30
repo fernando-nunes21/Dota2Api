@@ -5,7 +5,7 @@ import com.dota.api.Skins.Skin
 
 class HeroService implements HeroServiceInterface{
 
-    List<Hero> getHeroes() {
+    List<Hero> getHeroes(String lane, String difficult, Boolean recommend, Integer offset, Integer limit) {
         return null
     }
 

@@ -4,7 +4,7 @@ import com.dota.api.Skills.Skill
 import com.dota.api.Skins.Skin
 
 interface HeroServiceInterface {
-    List<Hero> getHeroes()
+    List<Hero> getHeroes(String lane, String difficult, Boolean recommend, Integer offset, Integer limit)
 
     Hero getHeroRecommendation(String lane, String difficult)
 
