@@ -1,5 +1,7 @@
 package com.dota.api
 
+import com.dota.api.Errors.InvalidHeroDifficult
+import com.dota.api.Errors.InvalidHeroLane
 import com.dota.api.Errors.LimitExceeded
 import com.dota.api.Errors.NotFoundHero
 import com.dota.api.Errors.OffsetExceeded
@@ -131,37 +133,41 @@ class HeroControllerTests extends Specification {
         response.andExpect(status().isOk())
     }
 
-
-    /*
-    def "Get a hero recommend should return a status code 200 when params are correctly"() {
+    def "Get a hero recommend should return a status code 200 when param is true and lane/difficult are correctly"() {
         given:
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>()
         params.add("lane", "safe")
         params.add("difficult", "easy")
+        params.add("recommend", "true")
+        params.add("offset", "20")
+        params.add("limit", "10")
 
         when:
-        ResultActions response = mockMvc.perform(get("/v1/heroes/recommends").params(params))
+        ResultActions response = mockMvc.perform(get("/v1/heroes").params(params))
 
         then:
         response.andExpect(status().isOk())
     }
 
-    def "Get a hero recommend should return a status code 404 when not found a hero in that lane and difficult "() {
+    def "Get a hero recommend should return a status code 404 when not found a hero in the informed lane "() {
         given:
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>()
         params.add("lane", "safe")
         params.add("difficult", "easy")
-        this.heroService.getHeroRecommendation("safe", "easy") >> {
-            throw new NotFoundHero("Nao foi encontrado nenhum heroi nesta lane com essa dificuldade")
+        params.add("recommend", "true")
+        params.add("offset", "20")
+        params.add("limit", "10")
+
+        this.heroService.getHeroes("safe", "easy", true, 20, 10) >> {
+            throw new NotFoundHero("Nao foi encontrado nenhum heroi nesta lane")
         }
 
         when:
-        ResultActions response = mockMvc.perform(get("/v1/heroes/recommends").params(params))
+        ResultActions response = mockMvc.perform(get("/v1/heroes").params(params))
 
         then:
         response.andExpect(status().isNotFound())
-        response.andExpect(content().json("{'errorMessage':'Nao foi encontrado nenhum heroi nesta lane com " +
-                "essa dificuldade'}"))
+        response.andExpect(content().json("{'errorMessage':'Nao foi encontrado nenhum heroi nesta lane'}"))
     }
 
     def "Get a hero recommend should return 400 when informed lane is invalid"() {
@@ -169,12 +175,16 @@ class HeroControllerTests extends Specification {
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>()
         params.add("lane", "low")
         params.add("difficult", "easy")
-        this.heroService.getHeroRecommendation("low", "easy") >> {
+        params.add("recommend", "true")
+        params.add("offset", "20")
+        params.add("limit", "10")
+
+        this.heroService.getHeroes("low", "easy", true, 20, 10) >> {
             throw new InvalidHeroLane("A lane informada do heroi nao existe. As lanes existentes são: safe, off e mid")
         }
 
         when:
-        ResultActions response = mockMvc.perform(get("/v1/heroes/recommends").params(params))
+        ResultActions response = mockMvc.perform(get("/v1/heroes").params(params))
 
         then:
         response.andExpect(status().isBadRequest())
@@ -187,20 +197,44 @@ class HeroControllerTests extends Specification {
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>()
         params.add("lane", "off")
         params.add("difficult", "overkill")
-        this.heroService.getHeroRecommendation("off", "overkill") >> {
+        params.add("recommend", "true")
+        params.add("offset", "20")
+        params.add("limit", "10")
+        this.heroService.getHeroes("off", "overkill", true, 20, 10) >> {
             throw new InvalidHeroDifficult("A dificuldade informada do heroi nao existe. As dificuldades existentes" +
                     " são: easy, medium e hard")
         }
 
         when:
-        ResultActions response = mockMvc.perform(get("/v1/heroes/recommends").params(params))
+        ResultActions response = mockMvc.perform(get("/v1/heroes").params(params))
 
         then:
         response.andExpect(status().isBadRequest())
         response.andExpect(content().json("{'errorMessage':'A dificuldade informada do heroi nao existe." +
                 " As dificuldades existentes são: easy, medium e hard'}"))
     }
-     */
+
+    def "Get a hero recommend should return a status code 404 when not found a hero in the informed difficult "() {
+        given:
+        LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>()
+        params.add("lane", "safe")
+        params.add("difficult", "easy")
+        params.add("recommend", "true")
+        params.add("offset", "20")
+        params.add("limit", "10")
+
+        this.heroService.getHeroes("safe", "easy", true, 20, 10) >> {
+            throw new NotFoundHero("Nao foi encontrado nenhum heroi nesta dificuldade")
+        }
+
+        when:
+        ResultActions response = mockMvc.perform(get("/v1/heroes").params(params))
+
+        then:
+        response.andExpect(status().isNotFound())
+        response.andExpect(content().json("{'errorMessage':'Nao foi encontrado nenhum heroi nesta " +
+                "dificuldade'}"))
+    }
 
     def "Get a hero skins should return 200 when path param is valid"() {
         when:
@@ -223,6 +257,5 @@ class HeroControllerTests extends Specification {
         response.andExpect(status().isNotFound())
         response.andExpect(content().json("{'errorMessage':'Nao foi encontrado nenhum heroi com o id " +
                 "informado'}"))
-
     }
 }

@@ -39,21 +39,7 @@ class HeroController {
             return new ResponseEntity(heroes, HttpStatus.OK)
         } catch (NotFoundHero e) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
-        } catch (LimitExceeded | OffsetExceeded e ) {
-            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
-        }
-    }
-
-    //TODO REMOVER ASSIM QUE TERMINAR TESTES COM GET HEROES
-    @GetMapping("/recommends")
-    ResponseEntity getHeroRecommendation(@RequestParam("lane") String lane,
-                                         @RequestParam("difficult") String difficult) {
-        try {
-            Hero hero = heroesService.getHeroRecommendation(lane, difficult)
-            return new ResponseEntity(hero, HttpStatus.OK)
-        } catch (NotFoundHero e) {
-            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
-        } catch (InvalidHeroLane | InvalidHeroDifficult e) {
+        } catch (LimitExceeded | OffsetExceeded | InvalidHeroLane | InvalidHeroDifficult e ) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
         }
     }
