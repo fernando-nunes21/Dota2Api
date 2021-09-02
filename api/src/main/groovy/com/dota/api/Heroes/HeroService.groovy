@@ -9,11 +9,11 @@ class HeroService implements HeroServiceInterface {
         return null
     }
 
-    List<Skin> getHeroSkins(Integer id) {
+    List<Skin> getHeroSkins(Integer id, Integer offset, Integer limit) {
         return null
     }
 
-    List<Skill> getHeroSkills(Integer id) {
+    List<Skill> getHeroSkills(Integer id, Integer offset, Integer limit) {
         return null
     }
 

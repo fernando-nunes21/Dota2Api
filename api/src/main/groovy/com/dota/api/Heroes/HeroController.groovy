@@ -39,23 +39,25 @@ class HeroController {
             return new ResponseEntity(heroes, HttpStatus.OK)
         } catch (NotFoundHero e) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
-        } catch (LimitExceeded | OffsetExceeded | InvalidHeroLane | InvalidHeroDifficult e ) {
+        } catch (LimitExceeded | OffsetExceeded | InvalidHeroLane | InvalidHeroDifficult e) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
         }
     }
 
     @GetMapping("/{id}/skins")
-    ResponseEntity getHeroSkins(@PathVariable Integer id) {
+    ResponseEntity getHeroSkins(@PathVariable Integer id, @RequestParam Integer offset, @RequestParam Integer limit) {
         try {
-            List<Skin> heroSkins = heroesService.getHeroSkins(id)
+            List<Skin> heroSkins = heroesService.getHeroSkins(id, offset, limit)
             return new ResponseEntity(heroSkins, HttpStatus.OK)
         } catch (NotFoundHero e) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
+        } catch (OffsetExceeded | LimitExceeded e) {
+            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
         }
     }
 
     @GetMapping("/{id}/skills")
-    ResponseEntity getHeroSkills(@PathVariable Integer id) {
+    ResponseEntity getHeroSkills(@PathVariable Integer id, @RequestParam Integer offset, @RequestParam Integer limit) {
 
     }
 
