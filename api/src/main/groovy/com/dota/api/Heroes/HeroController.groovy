@@ -1,5 +1,6 @@
 package com.dota.api.Heroes
 
+import com.dota.api.Errors.HeroInvalidFields
 import com.dota.api.Errors.InvalidHeroDifficult
 import com.dota.api.Errors.InvalidHeroLane
 import com.dota.api.Errors.LimitExceeded
@@ -45,16 +46,32 @@ class HeroController {
 
     @PostMapping
     ResponseEntity createHero() {
-
+        try {
+            heroesService.createHero()
+            return new ResponseEntity(new CrudResponses("O heroi foi criado com sucesso"), HttpStatus.OK)
+        } catch (HeroInvalidFields e) {
+            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
+        }
     }
 
     @PutMapping("/{id}")
     ResponseEntity editHero(@PathVariable Integer id) {
+        try {
+            heroesService.editHero(id)
+            return new ResponseEntity(new CrudResponses("Editado com sucesso"), HttpStatus.OK)
 
+        } catch (NotFoundHero e) {
+            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
+        }
     }
 
     @DeleteMapping("/{id}")
     ResponseEntity deleteHero(@PathVariable Integer id) {
-
+        try {
+            heroesService.deleteHero(id)
+            return new ResponseEntity(new CrudResponses("Heroi deletado com sucesso"), HttpStatus.OK)
+        } catch (NotFoundHero e) {
+            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
+        }
     }
 }
