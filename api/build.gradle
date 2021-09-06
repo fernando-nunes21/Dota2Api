@@ -16,7 +16,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.codehaus.groovy:groovy'
+	implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0-rc1'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0-rc1'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.0-rc1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation platform("org.spockframework:spock-bom:2.0-groovy-3.0")
+	testImplementation "org.spockframework:spock-core"
 }
 
 test {
