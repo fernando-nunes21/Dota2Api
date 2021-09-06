@@ -6,4 +6,8 @@ class CrudResponses {
     CrudResponses(String response) {
         this.response = response
     }
+
+    String getResponse() {
+        return response
+    }
 }
