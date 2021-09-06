@@ -1,19 +1,8 @@
 package com.dota.api.Heroes
 
-import com.dota.api.Skills.Skill
-import com.dota.api.Skins.Skin
-
 class HeroService implements HeroServiceInterface {
 
     List<Hero> getHeroes(String lane, String difficult, Boolean recommend, Integer offset, Integer limit) {
-        return null
-    }
-
-    List<Skin> getHeroSkins(Integer id, Integer offset, Integer limit) {
-        return null
-    }
-
-    List<Skill> getHeroSkills(Integer id, Integer offset, Integer limit) {
         return null
     }
 
