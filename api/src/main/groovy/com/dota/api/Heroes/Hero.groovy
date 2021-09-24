@@ -7,4 +7,24 @@ class Hero {
     private String difficult
     private List<String> skills
     private List<String> skins
+
+    String getName() {
+        return name
+    }
+
+    String getLane() {
+        return lane
+    }
+
+    String getDifficult() {
+        return difficult
+    }
+
+    List<String> getSkills() {
+        return skills
+    }
+
+    List<String> getSkins() {
+        return skins
+    }
 }
