@@ -1,5 +1,6 @@
 package com.dota.api
 
+import com.dota.api.Heroes.HeroService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
