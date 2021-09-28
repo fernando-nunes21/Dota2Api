@@ -1,5 +1,7 @@
 package com.dota.api.Heroes
 
+import groovy.transform.ToString
+
 class Hero {
     private Integer id
     private String name

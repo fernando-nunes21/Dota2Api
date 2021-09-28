@@ -9,12 +9,12 @@ import com.dota.api.Errors.OffsetExceeded
 import com.dota.api.Errors.ResponseError
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -46,9 +46,9 @@ class HeroController {
     }
 
     @PostMapping
-    ResponseEntity createHero() {
+    ResponseEntity createHero(@RequestBody Hero hero) {
         try {
-            heroesService.createHero()
+            heroesService.createHero(hero)
             return new ResponseEntity(new CrudResponses("O heroi foi criado com sucesso"), HttpStatus.OK)
         } catch (HeroInvalidFields e) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)

@@ -6,8 +6,10 @@ import com.dota.api.Errors.InvalidHeroLane
 import com.dota.api.Errors.LimitExceeded
 import com.dota.api.Errors.NotFoundHero
 import com.dota.api.Errors.OffsetExceeded
+import com.dota.api.Heroes.Hero
 import com.dota.api.Heroes.HeroController
 import com.dota.api.Heroes.HeroService
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -242,27 +244,17 @@ class HeroControllerTests extends Specification {
     }
 
     def "Create hero should return 200 and confirm when a hero is created"() {
+        given:
+        String request = "{}"
+
         when:
-        ResultActions response = mockMvc.perform(post("/v1/heroes"))
+        ResultActions response = mockMvc.perform(post("/v1/heroes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request))
 
         then:
         response.andExpect(status().isOk())
         response.andExpect(content().json("{'response':'O heroi foi criado com sucesso'}"))
-    }
-
-    def "Create hero should return 400 when hero information are invalid"() {
-        given:
-        this.heroService.createHero() >> {
-            throw new HeroInvalidFields("Campo da lane esta vazio. Revise as informações do heroi")
-        }
-
-        when:
-        ResultActions response = mockMvc.perform(post("/v1/heroes"))
-
-        then:
-        response.andExpect(status().isBadRequest())
-        response.andExpect(content().json("{'errorMessage':'Campo da lane esta vazio. Revise as " +
-                "informações do heroi'}"))
     }
 
     def "Delete hero should return 200 when hero is deleted"() {
