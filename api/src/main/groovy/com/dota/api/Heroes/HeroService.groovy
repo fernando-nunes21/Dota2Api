@@ -31,7 +31,7 @@ class HeroService implements HeroServiceInterface {
     }
 
     void deleteHero(Integer id) {
-
+        this.heroRepository.delete(id)
     }
 
     private void fieldNameValidation(String name) {
