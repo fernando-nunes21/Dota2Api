@@ -30,11 +30,11 @@ class HeroController {
     }
 
     @GetMapping
-    ResponseEntity getHeroes(@RequestParam("lane") String lane,
-                             @RequestParam("difficult") String difficult,
-                             @RequestParam("recommend") Boolean recommend,
-                             @RequestParam("offset") Integer offset,
-                             @RequestParam("limit") Integer limit) {
+    ResponseEntity getHeroes(@RequestParam(name = "lane", required = false) String lane,
+                             @RequestParam(name = "difficult", required = false) String difficult,
+                             @RequestParam(name = "recommend", required = true) Boolean recommend,
+                             @RequestParam(name = "offset", required = true) Integer offset,
+                             @RequestParam(name = "limit", required = true) Integer limit) {
         try {
             List<Hero> heroes = heroesService.getHeroes(lane, difficult, recommend, offset, limit)
             return new ResponseEntity(heroes, HttpStatus.OK)
@@ -56,9 +56,9 @@ class HeroController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity editHero(@PathVariable Integer id) {
+    ResponseEntity editHero(@PathVariable Integer id, @RequestBody Hero hero) {
         try {
-            heroesService.editHero(id)
+            heroesService.editHero(id, hero)
             return new ResponseEntity(new CrudResponses("Editado com sucesso"), HttpStatus.OK)
 
         } catch (NotFoundHero e) {

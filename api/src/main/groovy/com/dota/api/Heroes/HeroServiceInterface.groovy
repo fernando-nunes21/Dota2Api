@@ -5,7 +5,7 @@ interface HeroServiceInterface {
 
     void createHero(Hero hero)
 
-    void editHero(Integer id)
+    void editHero(Integer id, Hero hero)
 
     void deleteHero(Integer id)
 }

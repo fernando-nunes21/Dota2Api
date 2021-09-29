@@ -14,24 +14,34 @@ class HeroService implements HeroServiceInterface {
     }
 
     List<Hero> getHeroes(String lane, String difficult, Boolean recommend, Integer offset, Integer limit) {
+        if(recommend){
+
+        } else{
+
+        }
         return null
     }
 
     void createHero(Hero hero) {
+        fieldsValidations(hero)
+        this.heroRepository.insert(hero)
+    }
+
+    void editHero(Integer id, Hero hero) {
+        fieldsValidations(hero)
+        this.heroRepository.edit(id, hero)
+    }
+
+    void deleteHero(Integer id) {
+        this.heroRepository.delete(id)
+    }
+
+    private void fieldsValidations(Hero hero){
         fieldNameValidation(hero.name)
         fieldLaneValidation(hero.lane.toLowerCase())
         fieldDifficultValidation(hero.difficult.toLowerCase())
         fieldSkillsValidation(hero.skills)
         fieldSkinsValidation(hero.skins)
-        this.heroRepository.insert(hero)
-    }
-
-    void editHero(Integer id) {
-
-    }
-
-    void deleteHero(Integer id) {
-        this.heroRepository.delete(id)
     }
 
     private void fieldNameValidation(String name) {
@@ -87,4 +97,5 @@ class HeroService implements HeroServiceInterface {
         }
         return false
     }
+
 }
