@@ -1,7 +1,9 @@
 package com.dota.api
 
 import com.dota.api.Errors.NotFoundHero
+import com.dota.api.Errors.OffsetExceeded
 import com.dota.api.Heroes.Hero
+import com.dota.api.Heroes.HeroRowMapper
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
@@ -17,8 +19,12 @@ class HeroRepository {
         this.jdbcTemplate = jdbcTemplate
     }
 
-    List<Hero> selectHeroes(){
-
+    List<Hero> selectHeroes(String lane, String difficult, Integer offset, Integer limit){
+        String sql = "SELECT * FROM heroes WHERE lane LIKE '${lane}' AND difficult LIKE '${difficult}' LIMIT ${limit} " +
+                "OFFSET ${offset}"
+        List<Hero> heroes = jdbcTemplate.query(sql, new HeroRowMapper())
+        heroesEmptyValidation(heroes, offset)
+        return heroes
     }
 
     void insert(Hero hero) {
@@ -59,7 +65,7 @@ class HeroRepository {
     private void heroIdValidation(Integer id) {
         String sql = "SELECT id FROM heroes WHERE id = ${id}"
         try {
-            Integer result = jdbcTemplate.queryForObject(sql, Integer.class)
+            jdbcTemplate.queryForObject(sql, Integer.class)
         } catch (EmptyResultDataAccessException ignored) {
             throw new NotFoundHero("Id informado do heroi não foi encontrado")
         }
@@ -67,5 +73,13 @@ class HeroRepository {
 
     private Array createSqlArray(List<String> list) {
         return jdbcTemplate.getDataSource().getConnection().createArrayOf("text", list.toArray())
+    }
+
+    private void heroesEmptyValidation(List<Hero> heroes, Integer offset){
+        if((heroes == [] || heroes == null) && offset > 0){
+            throw new OffsetExceeded("Seu offset é maior que o numero máximo de herois encontrados.")
+        } else if(heroes == [] || heroes == null){
+            throw new NotFoundHero("Não foi encontrado nenhum heroi")
+        }
     }
 }

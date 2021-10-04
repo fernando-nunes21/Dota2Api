@@ -1,6 +1,7 @@
 package com.dota.api.Heroes
 
 import com.dota.api.Errors.HeroInvalidFields
+import com.dota.api.Errors.LimitExceeded
 import com.dota.api.HeroRepository
 import org.springframework.stereotype.Service
 
@@ -8,18 +9,19 @@ import org.springframework.stereotype.Service
 class HeroService implements HeroServiceInterface {
 
     private HeroRepository heroRepository
+    private final Integer DEFAULT_LIMIT = 30
 
     HeroService(HeroRepository heroRepository) {
         this.heroRepository = heroRepository
     }
 
-    List<Hero> getHeroes(String lane, String difficult, Boolean recommend, Integer offset, Integer limit) {
-        if(recommend){
-
-        } else{
-
+    List<Hero> getHeroes(String lane, String difficult, Integer offset, Integer limit) {
+        String filterLane = filterFieldValidation(lane)
+        String filterDifficult = filterFieldValidation(difficult)
+        if(isLimitExceeded(limit)) {
+            throw new LimitExceeded("O limite informado ultrapassou o limite máximo permitido (DEFAULT = 30)")
         }
-        return null
+        return this.heroRepository.selectHeroes(filterLane, filterDifficult, offset, limit)
     }
 
     void createHero(Hero hero) {
@@ -98,4 +100,15 @@ class HeroService implements HeroServiceInterface {
         return false
     }
 
+    private String filterFieldValidation(String field){
+        if(isFieldInvalid(field)){
+            return "%"
+        } else{
+            return field
+        }
+    }
+
+    private boolean isLimitExceeded(Integer limit){
+        return limit > DEFAULT_LIMIT
+    }
 }

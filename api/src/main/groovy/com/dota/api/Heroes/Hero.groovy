@@ -27,4 +27,28 @@ class Hero {
     List<String> getSkins() {
         return skins
     }
+
+    void setId(Integer id) {
+        this.id = id
+    }
+
+    void setName(String name) {
+        this.name = name
+    }
+
+    void setLane(String lane) {
+        this.lane = lane
+    }
+
+    void setDifficult(String difficult) {
+        this.difficult = difficult
+    }
+
+    void setSkills(List<String> skills) {
+        this.skills = skills
+    }
+
+    void setSkins(List<String> skins) {
+        this.skins = skins
+    }
 }

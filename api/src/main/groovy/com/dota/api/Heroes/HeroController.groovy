@@ -32,11 +32,10 @@ class HeroController {
     @GetMapping
     ResponseEntity getHeroes(@RequestParam(name = "lane", required = false) String lane,
                              @RequestParam(name = "difficult", required = false) String difficult,
-                             @RequestParam(name = "recommend", required = true) Boolean recommend,
                              @RequestParam(name = "offset", required = true) Integer offset,
                              @RequestParam(name = "limit", required = true) Integer limit) {
         try {
-            List<Hero> heroes = heroesService.getHeroes(lane, difficult, recommend, offset, limit)
+            List<Hero> heroes = heroesService.getHeroes(lane, difficult, offset, limit)
             return new ResponseEntity(heroes, HttpStatus.OK)
         } catch (NotFoundHero e) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
