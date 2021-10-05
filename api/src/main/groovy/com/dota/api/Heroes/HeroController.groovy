@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -29,13 +30,12 @@ class HeroController {
     }
 
     @GetMapping
-    ResponseEntity getHeroes(@RequestParam("lane") String lane,
-                             @RequestParam("difficult") String difficult,
-                             @RequestParam("recommend") Boolean recommend,
-                             @RequestParam("offset") Integer offset,
-                             @RequestParam("limit") Integer limit) {
+    ResponseEntity getHeroes(@RequestParam(name = "lane", required = false) String lane,
+                             @RequestParam(name = "difficult", required = false) String difficult,
+                             @RequestParam(name = "offset", required = true) Integer offset,
+                             @RequestParam(name = "limit", required = true) Integer limit) {
         try {
-            List<Hero> heroes = heroesService.getHeroes(lane, difficult, recommend, offset, limit)
+            List<Hero> heroes = heroesService.getHeroes(lane, difficult, offset, limit)
             return new ResponseEntity(heroes, HttpStatus.OK)
         } catch (NotFoundHero e) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
@@ -45,9 +45,9 @@ class HeroController {
     }
 
     @PostMapping
-    ResponseEntity createHero() {
+    ResponseEntity createHero(@RequestBody Hero hero) {
         try {
-            heroesService.createHero()
+            heroesService.createHero(hero)
             return new ResponseEntity(new CrudResponses("O heroi foi criado com sucesso"), HttpStatus.OK)
         } catch (HeroInvalidFields e) {
             return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
@@ -55,9 +55,9 @@ class HeroController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity editHero(@PathVariable Integer id) {
+    ResponseEntity editHero(@PathVariable Integer id, @RequestBody Hero hero) {
         try {
-            heroesService.editHero(id)
+            heroesService.editHero(id, hero)
             return new ResponseEntity(new CrudResponses("Editado com sucesso"), HttpStatus.OK)
 
         } catch (NotFoundHero e) {
