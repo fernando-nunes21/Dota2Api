@@ -1,4 +1,4 @@
-package com.dota.api
+package com.dota.api.Repository
 
 import com.dota.api.Errors.NotFoundHero
 import com.dota.api.Errors.OffsetExceeded
@@ -58,7 +58,7 @@ class HeroRepository {
         Object[] params = new Object[]{id}
         int result = jdbcTemplate.update(sql, params)
         if (result == 0) {
-            throw new NotFoundHero("O heroi com id informado não existe. Por favor, informe um id válido.")
+            throw new NotFoundHero("O id -> ${id} não foi encontrado")
         }
     }
 
@@ -67,7 +67,7 @@ class HeroRepository {
         try {
             jdbcTemplate.queryForObject(sql, Integer.class)
         } catch (EmptyResultDataAccessException ignored) {
-            throw new NotFoundHero("Id informado do heroi não foi encontrado")
+            throw new NotFoundHero("O id -> ${id} não foi encontrado")
         }
     }
 

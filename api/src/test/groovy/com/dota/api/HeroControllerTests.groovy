@@ -1,12 +1,9 @@
 package com.dota.api
 
-import com.dota.api.Errors.HeroInvalidFields
-import com.dota.api.Errors.InvalidHeroDifficult
-import com.dota.api.Errors.InvalidHeroLane
+
 import com.dota.api.Errors.LimitExceeded
 import com.dota.api.Errors.NotFoundHero
 import com.dota.api.Errors.OffsetExceeded
-import com.dota.api.Heroes.Hero
 import com.dota.api.Heroes.HeroController
 import com.dota.api.Heroes.HeroService
 import org.springframework.http.MediaType
