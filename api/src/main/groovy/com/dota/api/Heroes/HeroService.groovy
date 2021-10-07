@@ -1,8 +1,8 @@
 package com.dota.api.Heroes
 
-import com.dota.api.Errors.HeroInvalidFields
+import com.dota.api.Errors.HeroInvalidField
 import com.dota.api.Errors.LimitExceeded
-import com.dota.api.HeroRepository
+import com.dota.api.Repository.HeroRepository
 import org.springframework.stereotype.Service
 
 @Service
@@ -40,48 +40,50 @@ class HeroService implements HeroServiceInterface {
 
     private void fieldsValidations(Hero hero){
         fieldNameValidation(hero.name)
-        fieldLaneValidation(hero.lane.toLowerCase())
-        fieldDifficultValidation(hero.difficult.toLowerCase())
+        fieldLaneValidation(hero.lane)
+        fieldDifficultValidation(hero.difficult)
         fieldSkillsValidation(hero.skills)
         fieldSkinsValidation(hero.skins)
     }
 
     private void fieldNameValidation(String name) {
         if (isFieldInvalid(name)) {
-            throw new HeroInvalidFields("O campo 'name' está vazio ou é nulo")
+            throw new HeroInvalidField("O campo 'name' está vazio ou é nulo")
         }
     }
 
     private void fieldLaneValidation(String lane) {
         if (isFieldInvalid(lane)) {
-            throw new HeroInvalidFields("O campo 'lane' está vazio ou é nulo")
+            throw new HeroInvalidField("O campo 'lane' está vazio ou é nulo")
         }
-        if (lane != "safe" && lane != "mid" && lane != "off") {
-            throw new HeroInvalidFields("O campo 'lane' nao esta setado corretamente. As lanes disponiveis sao: " +
+        if (lane.toLowerCase() != "safe" && lane.toLowerCase() != "mid" && lane.toLowerCase() != "off") {
+            throw new HeroInvalidField("O campo 'lane' nao esta setado corretamente. As lanes disponiveis sao: " +
                     "'Safe, Mid, Off'")
         }
     }
 
     private void fieldDifficultValidation(String difficult) {
         if (isFieldInvalid(difficult)) {
-            throw new HeroInvalidFields("O campo 'difficult' está vazio ou é nulo")
+            throw new HeroInvalidField("O campo 'difficult' está vazio ou é nulo")
         }
-        if (difficult != "easy" && difficult != "medium" && difficult != "hard") {
-            throw new HeroInvalidFields("O campo 'difficult' nao esta setado corretamente. As dificuldades " +
+        if (difficult.toLowerCase()  != "easy" &&
+                difficult.toLowerCase()  != "medium" &&
+                difficult.toLowerCase()  != "hard") {
+            throw new HeroInvalidField("O campo 'difficult' nao esta setado corretamente. As dificuldades " +
                     "disponiveis sao: 'Easy, Medium, Hard'")
         }
     }
 
     private void fieldSkillsValidation(List<String> skills) {
         if (isFieldInvalid(skills)) {
-            throw new HeroInvalidFields("O campo 'skills' é nulo ou nao contem nenhuma skill. É obrigatório o heroi " +
+            throw new HeroInvalidField("O campo 'skills' é nulo ou nao contem nenhuma skill. É obrigatório o heroi " +
                     "ter no mínimo 1 skill")
         }
     }
 
     private void fieldSkinsValidation(List<String> skins) {
         if (isFieldInvalid(skins)) {
-            throw new HeroInvalidFields("O campo 'skins' é nulo ou nao contem nenhuma skin. É obrigatorio o heroi ter" +
+            throw new HeroInvalidField("O campo 'skins' é nulo ou nao contem nenhuma skin. É obrigatorio o heroi ter" +
                     "no mínimo 1 skin")
         }
     }

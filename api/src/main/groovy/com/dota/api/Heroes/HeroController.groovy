@@ -1,12 +1,6 @@
 package com.dota.api.Heroes
 
-import com.dota.api.Errors.HeroInvalidFields
-import com.dota.api.Errors.InvalidHeroDifficult
-import com.dota.api.Errors.InvalidHeroLane
-import com.dota.api.Errors.LimitExceeded
-import com.dota.api.Errors.NotFoundHero
-import com.dota.api.Errors.OffsetExceeded
-import com.dota.api.Errors.ResponseError
+
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -30,48 +24,29 @@ class HeroController {
     }
 
     @GetMapping
-    ResponseEntity getHeroes(@RequestParam(name = "lane", required = false) String lane,
-                             @RequestParam(name = "difficult", required = false) String difficult,
-                             @RequestParam(name = "offset", required = true) Integer offset,
-                             @RequestParam(name = "limit", required = true) Integer limit) {
-        try {
-            List<Hero> heroes = heroesService.getHeroes(lane, difficult, offset, limit)
-            return new ResponseEntity(heroes, HttpStatus.OK)
-        } catch (NotFoundHero e) {
-            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
-        } catch (LimitExceeded | OffsetExceeded | InvalidHeroLane | InvalidHeroDifficult e) {
-            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
-        }
+    ResponseEntity<?> getHeroes(@RequestParam(name = "lane", required = false) String lane,
+                                @RequestParam(name = "difficult", required = false) String difficult,
+                                @RequestParam(name = "offset", required = true) Integer offset,
+                                @RequestParam(name = "limit", required = true) Integer limit) {
+        List<Hero> heroes = heroesService.getHeroes(lane, difficult, offset, limit)
+        return new ResponseEntity(heroes, HttpStatus.OK)
     }
 
     @PostMapping
-    ResponseEntity createHero(@RequestBody Hero hero) {
-        try {
-            heroesService.createHero(hero)
-            return new ResponseEntity(new CrudResponses("O heroi foi criado com sucesso"), HttpStatus.OK)
-        } catch (HeroInvalidFields e) {
-            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.BAD_REQUEST)
-        }
+    ResponseEntity<?> createHero(@RequestBody Hero hero) {
+        heroesService.createHero(hero)
+        return new ResponseEntity(new CrudResponses("O heroi foi criado com sucesso"), HttpStatus.OK)
     }
 
     @PutMapping("/{id}")
-    ResponseEntity editHero(@PathVariable Integer id, @RequestBody Hero hero) {
-        try {
-            heroesService.editHero(id, hero)
-            return new ResponseEntity(new CrudResponses("Editado com sucesso"), HttpStatus.OK)
-
-        } catch (NotFoundHero e) {
-            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
-        }
+    ResponseEntity<?> editHero(@PathVariable Integer id, @RequestBody Hero hero) {
+        heroesService.editHero(id, hero)
+        return new ResponseEntity(new CrudResponses("Editado com sucesso"), HttpStatus.OK)
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity deleteHero(@PathVariable Integer id) {
-        try {
-            heroesService.deleteHero(id)
-            return new ResponseEntity(new CrudResponses("Heroi deletado com sucesso"), HttpStatus.OK)
-        } catch (NotFoundHero e) {
-            return new ResponseEntity(new ResponseError(e.getMessage()), HttpStatus.NOT_FOUND)
-        }
+    ResponseEntity<?> deleteHero(@PathVariable Integer id) {
+        heroesService.deleteHero(id)
+        return new ResponseEntity(new CrudResponses("Heroi deletado com sucesso"), HttpStatus.OK)
     }
 }
